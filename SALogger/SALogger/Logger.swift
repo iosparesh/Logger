@@ -20,7 +20,7 @@ public class Logger {
         }
     }
     
-    init(environment: Enviroment) {
+    public init(environment: Enviroment) {
         UserDefaults.standard.set(environment.string, forKey: "environment")
         UserDefaults.standard.synchronize()
     }
