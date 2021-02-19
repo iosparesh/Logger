@@ -11,7 +11,41 @@ import Foundation
 public class Logger {
 
     public static func log<T>(value: T?) {
-        print(String(describing: value))
+        let defaultValue = UserDefaults.standard.value(forKey: "environment") as? String ?? ""
+        switch Enviroment(string: defaultValue) {
+        case .Dev, .Stage, .Temp:
+            print(String(describing: value))
+        default:
+            break
+        }
     }
     
+    init(environment: Enviroment) {
+        UserDefaults.standard.set(environment.string, forKey: "environment")
+        UserDefaults.standard.synchronize()
+    }
+    
+}
+
+public enum Enviroment: String {
+    case Production
+    case Dev
+    case Stage
+    case Temp
+    
+    var string: String {
+        switch self {
+        case .Dev:
+            return "Dev"
+        case .Production:
+            return "Production"
+        case .Stage:
+            return "Stage"
+        case .Temp:
+            return "Temp"
+        }
+    }
+    init(string: String) {
+        self = Enviroment(rawValue: string) ?? .Dev
+    }
 }
